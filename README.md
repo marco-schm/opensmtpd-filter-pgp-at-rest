@@ -29,6 +29,12 @@ go vet ./...
 go build -o opensmtpd-filter-pgp-at-rest .
 ```
 
+## Releases
+
+[GitHub Releases](https://github.com/marco-schm/opensmtpd-filter-pgp-at-rest/releases) provide `tar.gz` archives for Linux, OpenBSD, FreeBSD, and macOS on amd64 and arm64, plus a `SHA256SUMS` file. Each archive contains the executable, this README, the license, and the example configuration. GnuPG must be installed separately on the target host. These cross-compiled binaries have build coverage; test the filter with your exact OpenSMTPD version and mail route before production deployment.
+
+After downloading an archive and `SHA256SUMS` into the same directory, verify it with `sha256sum -c SHA256SUMS` (or `shasum -a 256 -c SHA256SUMS` on macOS).
+
 ## Configure
 
 Copy [config.example.json](config.example.json) to a root-owned file outside the repository. Replace the sample address, public key path, and fingerprint. Keep private keys **off the mail server**. The key file must contain exactly one public certificate with a usable encryption key. The filter validates the fingerprint and key state at startup and pins the public key for its lifetime; restart it after changing a key.
