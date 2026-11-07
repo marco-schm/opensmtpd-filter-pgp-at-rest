@@ -2,7 +2,7 @@
 
 ## Report a vulnerability
 
-Use GitHub's **Security → Report a vulnerability** feature for private reports. If it is unavailable, open an issue requesting a private contact method without including exploit details or message contents. Do not send private keys, passphrases, or real mail in a report.
+Private vulnerability reporting is enabled for this repository. Use GitHub's **Security → Report a vulnerability** feature and include a minimal reproduction using synthetic messages. Do not send private keys, passphrases, or real mail in a report.
 
 ## Threat model and limits
 
