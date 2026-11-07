@@ -139,6 +139,32 @@ func TestProtocolPreservesUnprotectedMessage(t *testing.T) {
 	}
 }
 
+func TestProtocol08HandshakeAndEvents(t *testing.T) {
+	c := Config{MaxBytes: 1024, MaxSessions: 2, keys: map[string]Recipient{"private@example.org": {}}}
+	var out bytes.Buffer
+	f := newFilter(c, cryptoEngine{}, &out)
+	input := strings.Join([]string{
+		"config|smtpd-version|7.9.0",
+		"config|protocol|0.8",
+		"config|ready",
+		"report|0.8|1|smtp-in|tx-begin|s1|m1",
+		"report|0.8|1|smtp-in|tx-rcpt|s1|m1|ok|public@example.org",
+		"filter|0.8|1|smtp-in|data|s1|t1",
+		"filter|0.8|1|smtp-in|data-line|s1|t2|body",
+		"filter|0.8|1|smtp-in|data-line|s1|t2|.",
+		"filter|0.8|1|smtp-in|commit|s1|t3",
+	}, "\n") + "\n"
+	if err := f.run(strings.NewReader(input)); err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(out.String(), "filter-result|s1|t3|proceed") {
+		t.Fatal(out.String())
+	}
+	if err := f.handle("report|0.7|1|smtp-in|tx-begin|s1|m1"); err == nil {
+		t.Fatal("accepted event version different from handshake")
+	}
+}
+
 func TestProtectedDomainAndSubaddressCannotBypass(t *testing.T) {
 	r := Recipient{Fingerprint: "0123456789ABCDEF0123456789ABCDEF01234567"}
 	c := Config{MaxBytes: 1024, MaxSessions: 2, SubAddrDelimiter: "+", keys: map[string]Recipient{"private@example.org": r}, domains: map[string]bool{"example.org": true}}

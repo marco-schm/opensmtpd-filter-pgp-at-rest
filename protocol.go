@@ -26,10 +26,11 @@ type filter struct {
 	engine   cryptoEngine
 	sessions map[string]*session
 	out      *bufio.Writer
+	version  string
 }
 
 func newFilter(c Config, engine cryptoEngine, out io.Writer) *filter {
-	return &filter{config: c, engine: engine, sessions: make(map[string]*session), out: bufio.NewWriter(out)}
+	return &filter{config: c, engine: engine, sessions: make(map[string]*session), out: bufio.NewWriter(out), version: "0.7"}
 }
 
 func (f *filter) send(format string, args ...any) error {
@@ -56,7 +57,7 @@ func (f *filter) register() error {
 
 func (f *filter) handle(line string) error {
 	p := strings.SplitN(line, "|", 9)
-	if len(p) < 6 || p[1] != "0.7" || p[3] != "smtp-in" {
+	if len(p) < 6 || p[1] != f.version || p[3] != "smtp-in" {
 		return errors.New("unsupported or malformed filter protocol")
 	}
 	sid := p[5]
@@ -202,8 +203,12 @@ func (f *filter) run(in io.Reader) error {
 			if !strings.HasPrefix(line, "config|") {
 				return errors.New("missing OpenSMTPD handshake")
 			}
-			if strings.HasPrefix(line, "config|protocol|") && line != "config|protocol|0.7" {
-				return errors.New("unsupported OpenSMTPD filter protocol")
+			if strings.HasPrefix(line, "config|protocol|") {
+				version := strings.TrimPrefix(line, "config|protocol|")
+				if version != "0.7" && version != "0.8" {
+					return errors.New("unsupported OpenSMTPD filter protocol")
+				}
+				f.version = version
 			}
 			continue
 		}

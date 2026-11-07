@@ -1,6 +1,6 @@
 # OpenSMTPD PGP at-rest filter
 
-An OpenSMTPD 0.7 filter that encrypts incoming messages for configured envelope recipients with their OpenPGP public keys. It puts the original subject, body, and attachments inside a PGP/MIME message and replaces the visible subject with `[...]`. A structurally valid, already encrypted PGP/MIME message passes through unchanged.
+An OpenSMTPD 0.7/0.8 filter that encrypts incoming messages for configured envelope recipients with their OpenPGP public keys. It puts the original subject, body, and attachments inside a PGP/MIME message and replaces the visible subject with `[...]`. A structurally valid, already encrypted PGP/MIME message passes through unchanged.
 
 **Security status:** This is security-sensitive software. Review the [threat model and deployment checks](SECURITY.md) before using it with real mail. Encryption begins in the filter; it cannot remove plaintext previously written by other components or from backups, logs, swap, or snapshots.
 
