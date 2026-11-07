@@ -1,0 +1,13 @@
+{
+  "gpg": "/usr/local/bin/gpg",
+  "max_bytes": 10485760,
+  "max_sessions": 16,
+  "protected_domains": ["example.org"],
+  "subaddress_delimiter": "+",
+  "recipients": {
+    "alice@example.org": {
+      "key_file": "/etc/opensmtpd-pgp/keys/alice.asc",
+      "fingerprint": "REPLACE_WITH_40_OR_64_HEX_DIGITS"
+    }
+  }
+}

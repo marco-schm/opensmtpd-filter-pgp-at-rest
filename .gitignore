@@ -1,0 +1,29 @@
+# Local deployment and migration records contain installation-specific details.
+DEPLOYMENT-*.md
+THUNDERBIRD-TEST.md
+deployment/
+scripts/
+migration_*.go
+
+# Local configuration, keys, mail, logs, and build artifacts.
+config.json
+server-config.json
+fingerprints.tsv
+gnupg/
+private-keys-v1.d/
+public/
+dist/
+__pycache__/
+*.pyc
+*.asc
+*.gpg
+*.pgp
+*.kbx
+*.key
+*.pem
+*.p12
+*.eml
+*.log
+.env
+.env.*
+opensmtpd-filter-pgp-at-rest
